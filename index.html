@@ -203,7 +203,7 @@
                         <details class="group">
                             <summary class="font-bold text-white mb-0.5 cursor-pointer flex justify-between items-center outline-none select-none">
                                 <span class="flex items-center gap-1.5 hover:text-amber-300 transition-colors">
-                                    <i class="fas fa-info-circle text-amber-400 sm:hidden"></i> Info Keamanan & Cara Dapat Token
+                                    <i class="fas fa-info-circle text-amber-400 sm:hidden"></i> Panduan Setup & Keamanan Token
                                 </span>
                                 <i class="fas fa-chevron-down text-slate-500 transition-transform duration-300 group-open:rotate-180"></i>
                             </summary>
@@ -435,7 +435,7 @@
             </div>
             <div class="flex gap-2">
                 <button type="button" id="btn-cancel-delete" class="flex-1 py-2 md:py-3 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-lg md:rounded-xl transition-colors text-xs md:text-sm">Cancel</button>
-                <button type="button" id="btn-confirm-delete" class="flex-1 py-2 md:py-3 btn-action btn-delete text-white font-bold rounded-lg md:rounded-xl text-xs md:text-sm">Yes, Delete!</button>
+                <button type="button" id="btn-confirm-delete" class="flex-1 py-2 md:py-3 btn-action btn-delete text-white font-bold rounded-lg md:rounded-xl text-xs md:text-sm flex items-center justify-center">Yes, Delete!</button>
             </div>
         </div>
     </div>
@@ -491,15 +491,19 @@
             }
         };
 
-        async function fetchGitHubPublicRepos() {
+        async function fetchGitHubPublicRepos(forceRefresh = false) {
             const owner = DOM.owner.value.trim();
             if(!owner || owner === "Awaiting 'Load' button...") return;
             
             const cacheKey = `gh_repo_cache_${owner}`;
-            const cachedData = sessionStorage.getItem(cacheKey);
-            if (cachedData) {
-                ghPublicReposCache = JSON.parse(cachedData);
-                return;
+            
+            // Jika tidak dipaksa refresh, coba ambil dari cache memori
+            if (!forceRefresh) {
+                const cachedData = sessionStorage.getItem(cacheKey);
+                if (cachedData) {
+                    ghPublicReposCache = JSON.parse(cachedData);
+                    return;
+                }
             }
 
             try {
@@ -534,6 +538,7 @@
                     
                     div.addEventListener('click', (e) => { 
                         e.preventDefault();
+                        e.stopPropagation();
                         DOM.repo.value = item;
                         DOM.dropdownRepo.classList.add('hidden');
                         saveSettings();
@@ -543,14 +548,19 @@
                 DOM.dropdownRepo.classList.remove('hidden');
             };
 
+            // Menambahkan click event agar dropdown lebih responsif saat disentuh di HP
             DOM.repo.addEventListener('focus', () => {
+                if(ghPublicReposCache.length === 0 && DOM.owner.value) fetchGitHubPublicRepos().then(render);
+                else render();
+            });
+            DOM.repo.addEventListener('click', () => {
                 if(ghPublicReposCache.length === 0 && DOM.owner.value) fetchGitHubPublicRepos().then(render);
                 else render();
             });
             DOM.repo.addEventListener('input', render);
             
             DOM.repo.addEventListener('blur', () => {
-                setTimeout(() => DOM.dropdownRepo.classList.add('hidden'), 200);
+                setTimeout(() => DOM.dropdownRepo.classList.add('hidden'), 250);
             });
         }
 
@@ -621,14 +631,20 @@
             DOM.deleteSelect.addEventListener('change', () => {
                 DOM.btnTriggerDelete.disabled = !DOM.deleteSelect.value;
             });
+            
             DOM.btnTriggerDelete.addEventListener('click', () => {
                 const selectedId = DOM.deleteSelect.value;
-                const selectedProj = vercelProjects.find(p => p.id === selectedId);
-                if (!selectedProj) return;
+                // Diperketat konversi ID ke String agar tidak gagal find
+                const selectedProj = vercelProjects.find(p => String(p.id) === String(selectedId));
+                if (!selectedProj) {
+                    showAlert("Silakan pilih Project yang valid terlebih dahulu.", "error");
+                    return;
+                }
                 DOM.modalTarget.textContent = selectedProj.name;
                 DOM.modalDelete.classList.add('active');
                 DOM.modalContent.classList.replace('scale-95', 'scale-100');
             });
+            
             DOM.btnCancelDel.addEventListener('click', () => {
                 DOM.modalContent.classList.replace('scale-100', 'scale-95');
                 setTimeout(() => DOM.modalDelete.classList.remove('active'), 200);
@@ -755,8 +771,12 @@
 
                 // 4. Set the Owner input natively
                 if (githubNamespace) {
-                    DOM.owner.value = githubNamespace;
-                    fetchGitHubPublicRepos(); 
+                    // Hanya timpa jika kosong, agar tidak merusak input manual user
+                    if (!DOM.owner.value.trim()) {
+                        DOM.owner.value = githubNamespace;
+                    }
+                    // Paksa refresh (true) daftar repo Github agar selalu sinkron saat menekan Load
+                    fetchGitHubPublicRepos(true); 
                 } else {
                     DOM.owner.value = "No Vercel Connect found";
                 }
@@ -773,12 +793,12 @@
         async function deleteProject() {
             const token = DOM.token.value.trim();
             const selectedId = DOM.deleteSelect.value;
-            const selectedProj = vercelProjects.find(p => p.id === selectedId);
+            const selectedProj = vercelProjects.find(p => String(p.id) === String(selectedId));
             
             if (!token || !selectedProj) return;
 
             const ogHtml = DOM.btnConfirmDel.innerHTML;
-            DOM.btnConfirmDel.innerHTML = `<div class="spinner border-t-white"></div>`;
+            DOM.btnConfirmDel.innerHTML = `<div class="spinner"></div>`;
             DOM.btnConfirmDel.disabled = true;
             DOM.btnCancelDel.disabled = true;
 
@@ -788,21 +808,29 @@
                     headers: { "Authorization": `Bearer ${token}` }
                 });
                 
-                if (!res.ok) throw new Error("Failed to delete project.");
+                if (!res.ok) {
+                    const errData = await res.json().catch(() => ({}));
+                    throw new Error(errData.error?.message || "Failed to delete project on Vercel.");
+                }
                 
-                vercelProjects = vercelProjects.filter(p => p.id !== selectedId);
+                // Optimistic UI Update
+                vercelProjects = vercelProjects.filter(p => String(p.id) !== String(selectedId));
                 renderProjectDropdown();
                 DOM.btnTriggerDelete.disabled = true;
                 saveSettings();
                 
-                DOM.btnCancelDel.click(); 
+                // Tutup modal secara hard-code (bukan simulasi klik) agar tidak nyangkut
+                DOM.modalContent.classList.replace('scale-100', 'scale-95');
+                setTimeout(() => DOM.modalDelete.classList.remove('active'), 200);
+                
                 showAlert(`Project <strong class="text-white">${selectedProj.name}</strong> deleted successfully.`, "success");
                 
             } catch (err) {
-                DOM.btnCancelDel.click();
+                DOM.modalContent.classList.replace('scale-100', 'scale-95');
+                setTimeout(() => DOM.modalDelete.classList.remove('active'), 200);
                 showAlert(err.message, "error");
             } finally {
-                DOM.btnConfirmDel.innerHTML = ogHtml;
+                DOM.btnConfirmDel.innerHTML = 'Yes, Delete!';
                 DOM.btnConfirmDel.disabled = false;
                 DOM.btnCancelDel.disabled = false;
             }
