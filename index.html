@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vercel DirectDeploy</title>
     
-    <!-- Warning: Using Tailwind CDN in production is not recommended for performance, 
-         but kept here to satisfy the single-file constraint without a build step. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -41,7 +39,11 @@
             color: #f8fafc;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-            font-size: 14px !important; /* Fixed accessibility: min 14px */
+            font-size: 13px !important; 
+        }
+        
+        @media (min-width: 768px) {
+            .input-dark { font-size: 14px !important; }
         }
         
         .input-dark:hover {
@@ -85,6 +87,10 @@
             background-color: transform;
             transform-origin: center;
             clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+        @media (min-width: 768px) {
+            .cyber-checkbox { width: 1.25rem; height: 1.25rem; }
+            .cyber-checkbox::before { width: 0.65rem; height: 0.65rem; }
         }
         .cyber-checkbox:checked { background-color: #06b6d4; border-color: #06b6d4; box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); }
         .cyber-checkbox:checked::before { transform: scale(1); }
@@ -133,41 +139,23 @@
 
         /* Futuristic Cyber Spinner */
         .spinner {
-            width: 18px; 
-            height: 18px;
+            width: 14px; 
+            height: 14px;
             border-radius: 50%;
             position: relative;
             animation: spin 1s linear infinite;
         }
-        
-        .spinner::before,
-        .spinner::after {
-            content: "";
-            position: absolute;
-            inset: -2px;
-            border-radius: 50%;
-            border: 2px solid transparent;
+        .spinner::before, .spinner::after {
+            content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid transparent;
         }
-
         .spinner::before {
-            border-top-color: #06b6d4;
-            border-right-color: #3b82f6;
-            z-index: 10;
+            border-top-color: #06b6d4; border-right-color: #3b82f6; z-index: 10;
             animation: pulse-glow 1.5s ease-in-out infinite alternate;
         }
-
         .spinner::after {
-            border-bottom-color: #06b6d4;
-            border-left-color: #3b82f6;
-            opacity: 0.5;
-            filter: blur(2px);
+            border-bottom-color: #06b6d4; border-left-color: #3b82f6; opacity: 0.5; filter: blur(2px);
         }
-
-        @keyframes spin { 
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.2), inset 0 0 5px rgba(6, 182, 212, 0.2); }
             100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.8), inset 0 0 10px rgba(6, 182, 212, 0.5); }
@@ -188,7 +176,7 @@
         
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
-        
+
         /* Fallback avatar style */
         .fallback-avatar {
             display: flex;
@@ -196,7 +184,7 @@
             justify-content: center;
             background-color: #0f172a;
             color: #64748b;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
         }
     </style>
 </head>
@@ -209,13 +197,13 @@
 
         <!-- Header -->
         <div class="p-3 md:p-6 pb-3 md:pb-4 border-b border-white/5 relative overflow-hidden flex justify-start items-center gap-3 md:gap-5 rounded-t-xl sm:rounded-t-2xl">
-            <i class="fas fa-satellite-dish absolute -right-2 -top-2 text-7xl md:text-9xl text-white/5 transform -rotate-12 pointer-events-none"></i>
+            <i class="fas fa-satellite-dish absolute -right-2 -top-2 text-7xl md:text-9xl text-white/5 transform -rotate-12 pointer-events-none" aria-hidden="true"></i>
             
-            <div class="relative z-10 shrink-0 group cursor-pointer" title="Vercel User" id="avatar-container">
+            <div class="relative z-10 shrink-0 group cursor-pointer" title="Vercel User" id="avatar-container" aria-label="User Profile">
                 <div class="absolute inset-0 bg-gradient-to-tr from-cyan-400 to-blue-500 rounded-full blur-[6px] md:blur-[10px] opacity-60 animate-pulse transition-opacity duration-500" id="avatar-glow"></div>
                 <div id="user-avatar-wrapper" class="relative w-10 h-10 md:w-16 md:h-16 rounded-full border-[2px] border-black overflow-hidden z-10 group-hover:scale-105 transition-transform duration-300 fallback-avatar">
                      <img src="danuk.jpg" id="user-avatar" alt="User Avatar" class="w-full h-full object-cover bg-slate-900" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                     <div class="w-full h-full bg-[#0f172a] text-[#64748b] flex items-center justify-center text-xl hidden"><i class="fas fa-user-astronaut"></i></div>
+                     <div class="w-full h-full bg-[#0f172a] text-[#64748b] flex items-center justify-center hidden"><i class="fas fa-user-astronaut"></i></div>
                 </div>
             </div>
 
@@ -232,15 +220,15 @@
         <div class="p-3 md:p-6 pt-3 md:pt-5 relative">
             
             <!-- Global Security Info -->
-            <div class="bg-black/40 border border-amber-500/20 rounded-lg p-3 md:p-4 mb-4 shadow-inner relative overflow-hidden">
+            <div class="bg-black/40 border border-amber-500/20 rounded-lg p-2.5 md:p-4 mb-4 shadow-inner relative overflow-hidden">
                 <div class="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-amber-400 to-orange-500"></div>
-                <div class="flex items-start gap-3 md:gap-4">
-                    <div class="bg-amber-500/10 p-2 rounded-md text-amber-400 shrink-0 mt-0.5 hidden sm:block">
-                        <i class="fas fa-shield-halved text-xl"></i>
+                <div class="flex items-start gap-2 md:gap-4">
+                    <div class="bg-amber-500/10 p-1 md:p-2 rounded-md text-amber-400 shrink-0 mt-0.5 hidden sm:block">
+                        <i class="fas fa-shield-halved text-sm md:text-xl" aria-hidden="true"></i>
                     </div>
-                    <div class="flex-1 text-xs md:text-sm text-slate-300 leading-tight w-full"> <!-- Fixed A11y: text-xs -->
+                    <div class="flex-1 text-[10px] md:text-sm text-slate-300 leading-tight w-full">
                         <details class="group">
-                            <summary class="font-bold text-white mb-0.5 cursor-pointer flex justify-between items-center outline-none select-none" aria-label="Toggle Security Information"> <!-- Fixed A11y: aria-label -->
+                            <summary class="font-bold text-white mb-0.5 cursor-pointer flex justify-between items-center outline-none select-none" aria-label="Toggle Security Information">
                                 <span class="flex items-center gap-1.5 hover:text-amber-300 transition-colors">
                                     <i class="fas fa-info-circle text-amber-400 sm:hidden"></i> Info Keamanan & Cara Dapat Token
                                 </span>
@@ -273,47 +261,47 @@
                 <!-- Token Input -->
                 <div class="md:col-span-2 group">
                     <div class="flex justify-between items-center mb-1">
-                        <label for="v-token" class="text-xs font-bold text-slate-400 uppercase tracking-wider group-focus-within:text-cyan-400 transition-colors">Vercel Token <span class="text-rose-500">*</span></label> <!-- Fixed A11y: text-xs, 'for' attribute -->
+                        <label for="v-token" class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider group-focus-within:text-cyan-400 transition-colors">Vercel Token <span class="text-rose-500">*</span></label>
                         <div class="flex items-center gap-2 md:gap-4">
-                            <button type="button" id="btn-load-account" class="hidden text-xs font-bold bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded hover:bg-cyan-500/30 transition-colors flex items-center gap-1 border border-cyan-500/30"> <!-- Fixed A11y: text-xs, padding -->
+                            <button type="button" id="btn-load-account" class="hidden text-[9px] md:text-xs font-bold bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded hover:bg-cyan-500/30 transition-colors flex items-center gap-1 border border-cyan-500/30">
                                 <i class="fas fa-sync-alt"></i> <span>Load</span>
                             </button>
                             <div class="flex items-center">
-                                <input type="checkbox" id="remember-token" class="cyber-checkbox origin-right">
-                                <label for="remember-token" class="ml-2 text-xs font-medium text-slate-400 cursor-pointer hover:text-slate-200 select-none">Remember</label> <!-- Fixed A11y: text-xs -->
+                                <input type="checkbox" id="remember-token" class="cyber-checkbox origin-right scale-75 md:scale-100">
+                                <label for="remember-token" class="ml-1 md:ml-2 text-[10px] md:text-xs font-medium text-slate-400 cursor-pointer hover:text-slate-200 select-none">Remember</label>
                             </div>
                         </div>
                     </div>
                     <div class="flex rounded-lg md:rounded-xl shadow-sm relative z-10">
-                        <span class="bg-black px-3 md:px-4 flex items-center justify-center text-slate-500 border border-r-0 border-slate-700/80 group-focus-within:border-cyan-500 transition-colors rounded-l-lg md:rounded-l-xl"><i class="fas fa-key text-sm md:text-base"></i></span>
-                        <input type="password" id="v-token" class="flex-1 w-full px-3 md:px-4 py-2 md:py-3 input-dark !border-x-0 mono tracking-wider" placeholder="vXxx_..." aria-label="Vercel Access Token"> <!-- Fixed A11y: aria-label -->
-                        <button type="button" id="toggle-token" class="bg-black px-3 md:px-4 flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-colors border border-l-0 border-slate-700/80 group-focus-within:border-cyan-500 focus:outline-none rounded-r-lg md:rounded-r-xl" aria-label="Toggle Token Visibility"> <!-- Fixed A11y: aria-label -->
-                            <i class="fas fa-eye text-sm md:text-base"></i>
+                        <span class="bg-black px-2.5 md:px-4 flex items-center justify-center text-slate-500 border border-r-0 border-slate-700/80 group-focus-within:border-cyan-500 transition-colors rounded-l-lg md:rounded-l-xl"><i class="fas fa-key text-xs md:text-base"></i></span>
+                        <input type="password" id="v-token" class="flex-1 w-full px-2 md:px-4 py-2 md:py-3 input-dark !border-x-0 mono tracking-wider" placeholder="vXxx_..." aria-label="Vercel Access Token">
+                        <button type="button" id="toggle-token" class="bg-black px-2.5 md:px-4 flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-colors border border-l-0 border-slate-700/80 group-focus-within:border-cyan-500 focus:outline-none rounded-r-lg md:rounded-r-xl" aria-label="Toggle Token Visibility">
+                            <i class="fas fa-eye text-xs md:text-base"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- GitHub Owner -->
                 <div class="group relative md:col-span-2">
-                    <label for="v-owner" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">GitHub Connected Account <span class="text-rose-500">*</span></label> <!-- Fixed A11y: text-xs, 'for' attribute -->
+                    <label for="v-owner" class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">GitHub Connected Account <span class="text-rose-500">*</span></label>
                     <div class="relative">
-                        <i class="fas fa-user absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm md:text-base group-focus-within:text-cyan-400 transition-colors z-30"></i>
-                        <input type="text" id="v-owner" class="w-full py-2 md:py-3 pl-9 md:pl-11 pr-3 input-dark rounded-lg md:rounded-xl mono relative z-20 cursor-not-allowed opacity-80" placeholder="Awaiting 'Load' button..." disabled aria-label="GitHub Owner">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 z-30">
-                            <span class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded border border-slate-700">Auto</span> <!-- Fixed A11y: text-xs -->
+                        <i class="fas fa-user absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs md:text-base group-focus-within:text-cyan-400 transition-colors z-30"></i>
+                        <input type="text" id="v-owner" class="w-full py-2 md:py-3 pl-8 md:pl-11 pr-3 input-dark rounded-lg md:rounded-xl mono relative z-20 cursor-not-allowed opacity-80" placeholder="Awaiting 'Load' button..." disabled aria-label="GitHub Owner">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2 z-30">
+                            <span class="text-[9px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded border border-slate-700">Auto</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Global Alert Box -->
-            <div id="alert-box" class="hidden mb-4 p-3 md:p-4 rounded-lg md:rounded-xl text-xs md:text-sm font-medium border relative z-10" role="alert"></div> <!-- Fixed A11y: text-xs, role -->
+            <div id="alert-box" class="hidden mb-4 p-2.5 md:p-4 rounded-lg md:rounded-xl text-[10px] md:text-sm font-medium border relative z-10" role="alert"></div>
 
-            <div class="nav-tabs mb-4" role="tablist"> <!-- Fixed A11y: role -->
-                <div class="nav-tab active py-2 md:py-3" data-target="tab-deploy" role="tab" tabindex="0" aria-selected="true">
+            <div class="nav-tabs mb-4" role="tablist">
+                <div class="nav-tab active py-2 md:py-3 text-xs md:text-sm" data-target="tab-deploy" role="tab" tabindex="0" aria-selected="true">
                     <i class="fas fa-rocket"></i> Deploy App
                 </div>
-                <div class="nav-tab py-2 md:py-3" data-target="tab-manage" role="tab" tabindex="0" aria-selected="false">
+                <div class="nav-tab py-2 md:py-3 text-xs md:text-sm" data-target="tab-manage" role="tab" tabindex="0" aria-selected="false">
                     <i class="fas fa-box-open"></i> Manage Project
                 </div>
             </div>
@@ -323,45 +311,45 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 md:gap-y-5 mb-4">
                     
                     <div class="group relative z-40 md:col-span-1">
-                        <label for="v-repo" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Repository Name <span class="text-rose-500">*</span></label> <!-- Fixed A11y: text-xs -->
+                        <label for="v-repo" class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Repository Name <span class="text-rose-500">*</span></label>
                         <div class="relative">
-                            <i class="fas fa-book-journal-whills absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm md:text-base group-focus-within:text-cyan-400 transition-colors z-30"></i>
-                            <input type="text" id="v-repo" autocomplete="off" class="w-full py-2 md:py-3 pl-9 md:pl-11 pr-8 input-dark rounded-lg md:rounded-xl mono relative z-20" placeholder="awesome-app">
-                            <i class="fas fa-chevron-down absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs pointer-events-none z-30"></i>
-                            <div id="dropdown-repo" class="absolute left-0 top-full mt-1 w-full bg-[#0a0a0e] border border-cyan-500/30 rounded-lg md:rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-y-auto max-h-48 hidden flex-col divide-y divide-white/5 py-1 z-50"></div>
+                            <i class="fas fa-book-journal-whills absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs md:text-base group-focus-within:text-cyan-400 transition-colors z-30"></i>
+                            <input type="text" id="v-repo" autocomplete="off" class="w-full py-2 md:py-3 pl-8 md:pl-11 pr-8 input-dark rounded-lg md:rounded-xl mono relative z-20" placeholder="awesome-app">
+                            <i class="fas fa-chevron-down absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-slate-500 text-[10px] pointer-events-none z-30"></i>
+                            <div id="dropdown-repo" class="absolute left-0 top-full mt-1 w-full bg-[#0a0a0e] border border-cyan-500/30 rounded-lg md:rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-y-auto max-h-40 hidden flex-col divide-y divide-white/5 py-1 z-50"></div>
                         </div>
                     </div>
 
                     <!-- Branch -->
                     <div class="group relative z-30 md:col-span-1">
-                        <label for="v-branch" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Branch <span class="text-rose-500">*</span></label> <!-- Fixed A11y: text-xs -->
+                        <label for="v-branch" class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Branch <span class="text-rose-500">*</span></label>
                         <div class="relative">
-                            <i class="fas fa-code-branch absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm md:text-base group-focus-within:text-cyan-400 transition-colors z-30"></i>
-                            <input type="text" id="v-branch" class="w-full py-2 md:py-3 pl-9 md:pl-11 pr-3 input-dark rounded-lg md:rounded-xl mono relative z-20" value="main">
+                            <i class="fas fa-code-branch absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs md:text-base group-focus-within:text-cyan-400 transition-colors z-30"></i>
+                            <input type="text" id="v-branch" class="w-full py-2 md:py-3 pl-8 md:pl-11 pr-3 input-dark rounded-lg md:rounded-xl mono relative z-20" value="main">
                         </div>
                     </div>
 
                     <!-- Advanced Settings Toggle -->
                     <div class="md:col-span-2 mt-1 relative z-20">
-                        <button type="button" id="toggle-advanced" class="w-full flex justify-between items-center bg-black/40 border border-slate-700/80 p-3 md:p-3.5 rounded-lg md:rounded-xl text-slate-300 text-xs font-bold uppercase tracking-wider hover:border-cyan-500 transition-colors focus:outline-none group shadow-inner" aria-expanded="false" aria-controls="advanced-settings"> <!-- Fixed A11y: aria attributes, text-xs -->
+                        <button type="button" id="toggle-advanced" class="w-full flex justify-between items-center bg-black/40 border border-slate-700/80 p-2.5 md:p-3.5 rounded-lg md:rounded-xl text-slate-300 text-[10px] md:text-xs font-bold uppercase tracking-wider hover:border-cyan-500 transition-colors focus:outline-none group shadow-inner" aria-expanded="false" aria-controls="advanced-settings">
                             <span class="flex items-center gap-2"><i class="fas fa-sliders-h text-cyan-500 group-hover:animate-pulse"></i> Advanced Settings (Optional)</span>
                             <i class="fas fa-chevron-down transition-transform duration-300" id="advanced-icon"></i>
                         </button>
                         
                         <div id="advanced-settings" class="hidden mt-3 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 md:gap-y-4 bg-black/20 p-3 md:p-4 rounded-lg md:rounded-xl border border-white/5 shadow-inner">
                             <div class="group">
-                                <label for="v-project" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Project Name</label> <!-- Fixed A11y: text-xs -->
+                                <label for="v-project" class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Project Name</label>
                                 <div class="relative">
-                                    <i class="fas fa-box absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm md:text-base group-focus-within:text-cyan-400 transition-colors"></i>
-                                    <input type="text" id="v-project" class="w-full py-2 md:py-3 pl-9 md:pl-11 pr-3 input-dark rounded-lg md:rounded-xl mono" placeholder="Auto-generate">
+                                    <i class="fas fa-box absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs md:text-base group-focus-within:text-cyan-400 transition-colors"></i>
+                                    <input type="text" id="v-project" class="w-full py-2 md:py-3 pl-8 md:pl-11 pr-3 input-dark rounded-lg md:rounded-xl mono" placeholder="Auto-generate">
                                 </div>
                             </div>
 
                             <div class="group">
-                                <label for="v-framework" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Framework</label> <!-- Fixed A11y: text-xs -->
+                                <label for="v-framework" class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Framework</label>
                                 <div class="relative">
-                                    <i class="fas fa-layer-group absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm md:text-base group-focus-within:text-cyan-400 transition-colors pointer-events-none z-10"></i>
-                                    <select id="v-framework" class="w-full py-2 md:py-3 pl-9 md:pl-11 pr-8 input-dark rounded-lg md:rounded-xl font-semibold text-slate-200 text-sm"> <!-- Fixed A11y: text-sm -->
+                                    <i class="fas fa-layer-group absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs md:text-base group-focus-within:text-cyan-400 transition-colors pointer-events-none z-10"></i>
+                                    <select id="v-framework" class="w-full py-2 md:py-3 pl-8 md:pl-11 pr-8 input-dark rounded-lg md:rounded-xl font-semibold text-slate-200 text-[11px] md:text-sm">
                                         <option value="">Auto Detect</option>
                                         <option value="nextjs">Next.js</option>
                                         <option value="vite">Vite</option>
@@ -374,53 +362,53 @@
                             </div>
 
                             <div class="group md:col-span-2">
-                                <label for="v-rootdir" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Root Directory</label> <!-- Fixed A11y: text-xs -->
+                                <label for="v-rootdir" class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Root Directory</label>
                                 <div class="relative">
-                                    <i class="far fa-folder-open absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm md:text-base group-focus-within:text-cyan-400 transition-colors"></i>
-                                    <input type="text" id="v-rootdir" class="w-full py-2 md:py-3 pl-9 md:pl-11 pr-3 input-dark rounded-lg md:rounded-xl mono" placeholder="Empty = Root (/)">
+                                    <i class="far fa-folder-open absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs md:text-base group-focus-within:text-cyan-400 transition-colors"></i>
+                                    <input type="text" id="v-rootdir" class="w-full py-2 md:py-3 pl-8 md:pl-11 pr-3 input-dark rounded-lg md:rounded-xl mono" placeholder="Empty = Root (/)">
                                 </div>
                             </div>
 
                             <div class="group md:col-span-2">
-                                <label for="v-env" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Environment Variables</label> <!-- Fixed A11y: text-xs -->
+                                <label for="v-env" class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-cyan-400 transition-colors">Environment Variables</label>
                                 <div class="rounded-lg md:rounded-xl overflow-hidden border border-slate-700/80 group-focus-within:border-cyan-500 transition-colors shadow-inner bg-black/60 relative">
-                                    <div class="bg-black px-3 py-2 border-b border-slate-800 flex items-center justify-between">
-                                        <div class="flex items-center gap-2">
-                                            <i class="fas fa-file-code text-cyan-500 text-xs"></i><span class="text-xs font-mono text-slate-300">.env</span> <!-- Fixed A11y: text-xs -->
+                                    <div class="bg-black px-3 py-1.5 border-b border-slate-800 flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <i class="fas fa-file-code text-cyan-500 text-[10px]"></i><span class="text-[9px] md:text-[10px] font-mono text-slate-300">.env</span>
                                         </div>
                                     </div>
-                                    <div id="env-lines" class="absolute left-0 top-[35px] bottom-0 w-8 md:w-10 bg-black/40 border-r border-slate-800 flex flex-col items-center py-2 text-xs font-mono text-slate-600 pointer-events-none select-none overflow-hidden" aria-hidden="true"> <!-- Fixed A11y: text-xs -->
+                                    <div id="env-lines" class="absolute left-0 top-[28px] bottom-0 w-7 md:w-8 bg-black/40 border-r border-slate-800 flex flex-col items-center py-2 text-[9px] md:text-[10px] font-mono text-slate-600 pointer-events-none select-none overflow-hidden" aria-hidden="true">
                                         <span>1</span><span>2</span><span>3</span>
                                     </div>
-                                    <textarea id="v-env" class="w-full p-2 pl-10 md:pl-12 bg-transparent text-emerald-400 mono text-xs md:text-sm min-h-[80px] md:min-h-[100px] focus:outline-none resize-none placeholder-slate-700 leading-normal" placeholder="API_KEY=secret_value" spellcheck="false" aria-label="Environment Variables"></textarea> <!-- Fixed A11y: text-xs -->
+                                    <textarea id="v-env" class="w-full p-2 pl-9 md:pl-10 bg-transparent text-emerald-400 mono text-[11px] md:text-[12px] min-h-[60px] md:min-h-[80px] focus:outline-none resize-none placeholder-slate-700 leading-normal" placeholder="API_KEY=secret_value" spellcheck="false" aria-label="Environment Variables"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-3 mb-4 relative z-10">
-                    <button type="button" id="btn-test" class="btn-action btn-test sm:w-1/3 text-slate-300 font-bold py-3 rounded-lg md:rounded-xl flex items-center justify-center gap-2 text-sm"> <!-- Fixed A11y: text-sm -->
-                        <i class="fas fa-satellite-dish text-slate-400"></i> <span>Test Access</span>
+                <div class="flex flex-col sm:flex-row gap-2.5 md:gap-3 mb-4 relative z-10">
+                    <button type="button" id="btn-test" class="btn-action btn-test sm:w-1/3 text-slate-300 font-bold py-2.5 md:py-3 rounded-lg md:rounded-xl flex items-center justify-center gap-1.5 text-[11px] md:text-sm">
+                        <i class="fas fa-satellite-dish text-slate-400 text-xs"></i> <span>Test Access</span>
                     </button>
-                    <button type="button" id="btn-deploy" class="btn-action btn-deploy sm:w-2/3 text-white font-bold py-3 rounded-lg md:rounded-xl flex items-center justify-center gap-2 shadow-lg text-sm"> <!-- Fixed A11y: text-sm -->
-                        <i class="fas fa-rocket text-base"></i> <span>Deploy to Vercel</span>
+                    <button type="button" id="btn-deploy" class="btn-action btn-deploy sm:w-2/3 text-white font-bold py-2.5 md:py-3 rounded-lg md:rounded-xl flex items-center justify-center gap-2 shadow-lg text-xs md:text-sm">
+                        <i class="fas fa-rocket text-sm"></i> <span>Deploy to Vercel</span>
                     </button>
                 </div>
 
                 <div class="rounded-lg md:rounded-xl overflow-hidden shadow-inner border border-slate-700/50 bg-[#020202] relative z-10">
                     <div class="bg-[#0a0a0a] border-b border-slate-800 px-3 py-2 flex items-center justify-between">
-                        <div class="flex gap-2">
-                            <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
-                            <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
-                            <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                        <div class="flex gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
                         </div>
-                        <div class="text-[10px] md:text-xs mono text-slate-500 font-bold tracking-widest uppercase">Build Console</div> <!-- Fixed A11y: text-xs -->
+                        <div class="text-[8px] md:text-[9px] mono text-slate-500 font-bold tracking-widest uppercase">Build Console</div>
                         <div class="w-8"></div>
                     </div>
-                    <div class="p-3 md:p-4 mono text-xs overflow-y-auto h-48 md:h-64 leading-relaxed scroll-smooth" id="log-container" aria-live="polite"> <!-- Fixed A11y: text-xs, aria-live -->
-                        <div id="logs" class="flex flex-col gap-2">
-                            <div class="text-slate-500 flex items-start gap-2">
+                    <div class="p-2.5 md:p-3 mono text-[9px] md:text-[11px] overflow-y-auto h-40 md:h-56 leading-relaxed scroll-smooth" id="log-container" aria-live="polite">
+                        <div id="logs" class="flex flex-col gap-1 md:gap-1.5">
+                            <div class="text-slate-500 flex items-start gap-1.5 md:gap-2">
                                 <span class="text-cyan-500" aria-hidden="true">❯</span><span>Deploy Engine (Ultra) initialized.</span>
                             </div>
                         </div>
@@ -430,26 +418,26 @@
 
             <!-- TAB 2: MANAGE PROJECT -->
             <div id="tab-manage" class="tab-content relative z-10" role="tabpanel">
-                <div class="bg-rose-950/20 border border-rose-900/50 rounded-xl md:rounded-2xl p-4 md:p-6 relative">
+                <div class="bg-rose-950/20 border border-rose-900/50 rounded-xl md:rounded-2xl p-3 md:p-5 relative">
                     <div class="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-rose-500 to-red-600 rounded-l-xl md:rounded-l-2xl"></div>
                     
-                    <h3 class="text-base md:text-lg font-bold text-rose-400 mb-1 flex items-center gap-2">
+                    <h3 class="text-sm md:text-lg font-bold text-rose-400 mb-0.5 flex items-center gap-2">
                         <i class="fas fa-skull-crossbones"></i> Delete Project
                     </h3>
-                    <p class="text-slate-400 text-xs md:text-sm mb-4">This action cannot be undone (Permanent).</p> <!-- Fixed A11y: text-xs -->
+                    <p class="text-slate-400 text-[10px] md:text-xs mb-3">This action cannot be undone (Permanent).</p>
                     
                     <!-- Form Delete -->
-                    <div class="group relative z-50 mb-4">
-                        <label for="v-delete-select" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-rose-400 transition-colors">Select Project <span class="text-rose-500">*</span></label> <!-- Fixed A11y: text-xs -->
+                    <div class="group relative z-50 mb-3">
+                        <label for="v-delete-select" class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 group-focus-within:text-rose-400 transition-colors">Select Project <span class="text-rose-500">*</span></label>
                         <div class="relative">
-                            <i class="fas fa-trash-alt absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-rose-500/50 text-sm md:text-base group-focus-within:text-rose-400 transition-colors z-30"></i>
-                            <select id="v-delete-select" class="w-full py-3 pl-9 md:pl-11 pr-8 input-dark rounded-lg md:rounded-xl font-semibold text-slate-200 border-rose-900/50 focus:border-rose-500 text-sm relative z-20"> <!-- Fixed A11y: text-sm -->
+                            <i class="fas fa-trash-alt absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-rose-500/50 text-xs md:text-base group-focus-within:text-rose-400 transition-colors z-30"></i>
+                            <select id="v-delete-select" class="w-full py-2.5 md:py-3 pl-8 md:pl-11 pr-8 input-dark rounded-lg md:rounded-xl font-semibold text-slate-200 border-rose-900/50 focus:border-rose-500 text-[11px] md:text-sm relative z-20">
                                 <option value="">Input Token and click 'Load' first...</option>
                             </select>
                         </div>
                     </div>
                     
-                    <button type="button" id="btn-trigger-delete" class="w-full btn-action btn-delete text-white font-bold py-3 rounded-lg md:rounded-xl flex justify-center items-center gap-2 focus:outline-none text-sm" disabled aria-label="Delete Project"> <!-- Fixed A11y: text-sm -->
+                    <button type="button" id="btn-trigger-delete" class="w-full btn-action btn-delete text-white font-bold py-2.5 md:py-3.5 rounded-lg md:rounded-xl flex justify-center items-center gap-2 focus:outline-none text-xs md:text-sm" disabled aria-label="Delete Project">
                         <i class="fas fa-trash-alt"></i> Delete Permanently
                     </button>
                 </div>
@@ -460,8 +448,7 @@
 
     <!-- Social Media Footer -->
     <div class="flex justify-center gap-6 md:gap-8 mt-1 mb-4 text-slate-500 text-2xl relative z-10">
-        <!-- Silakan ganti URL href di bawah ini dengan link sosmed Anda -->
-        <a href="https://www.tiktok.com/@danukmobilador?_r=1&_t=ZS-9A3KVzabV5T" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-transform transform hover:scale-110" aria-label="TikTok"><i class="fab fa-tiktok"></i></a> <!-- Fixed A11y: aria-label, rel attr -->
+        <a href="https://www.tiktok.com/@danukmobilador?_r=1&_t=ZS-9A3KVzabV5T" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-transform transform hover:scale-110" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
         <a href="https://www.instagram.com/danukpermadi2006?stkn=MTF3ZDV0NWI0MjZ5ZQ==" target="_blank" rel="noopener noreferrer" class="hover:text-pink-500 transition-transform transform hover:scale-110" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="https://youtube.com/@danukmobilador" target="_blank" rel="noopener noreferrer" class="hover:text-red-500 transition-transform transform hover:scale-110" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         <a href="https://github.com/danukpermadi2006" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-transform transform hover:scale-110" aria-label="GitHub"><i class="fab fa-github"></i></a>
@@ -469,13 +456,13 @@
     </div>
 
     <!-- Modal Delete -->
-    <div id="modal-delete" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title"> <!-- Fixed A11y: role, aria attributes -->
+    <div id="modal-delete" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="bg-[#0f172a] border border-rose-500/30 rounded-xl md:rounded-2xl p-4 md:p-6 w-[92%] max-w-sm shadow-[0_20px_50px_rgba(0,0,0,0.9)] transform scale-95 transition-transform duration-300" id="modal-delete-content">
             <div class="text-center mb-4">
                 <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto mb-3 border border-rose-500/20">
                     <i class="fas fa-exclamation-triangle text-2xl md:text-3xl"></i>
                 </div>
-                <h3 class="text-lg md:text-xl font-bold text-white mb-1">Confirm Deletion</h3>
+                <h3 class="text-lg md:text-xl font-bold text-white mb-1" id="modal-title">Confirm Deletion</h3>
                 <p class="text-slate-400 text-xs md:text-sm">You are about to delete:</p>
                 <p class="text-rose-400 font-mono font-bold text-sm md:text-lg mt-0.5" id="modal-project-target"></p>
                 <p class="text-slate-300 text-[10px] md:text-xs mt-3 p-2 bg-rose-950/30 rounded border border-rose-900/50">
@@ -520,15 +507,13 @@
             modalContent: document.getElementById('modal-delete-content'),
             modalTarget: document.getElementById('modal-project-target'),
             btnCancelDel: document.getElementById('btn-cancel-delete'),
-            btnConfirmDel: document.getElementById('btn-confirm-delete'),
-            
-            avatarWrapper: document.getElementById('user-avatar-wrapper')
+            btnConfirmDel: document.getElementById('btn-confirm-delete')
         };
 
         let vercelProjects = [];
         let ghPublicReposCache = [];
 
-        // Security note: This is weak obfuscation, kept per user request.
+        // Fixed Obfuscator definition to prevent SyntaxError
         const obfuscator = {
             encode: (str) => {
                 if (!str) return '';
@@ -548,6 +533,7 @@
             
             const cacheKey = `gh_repo_cache_${owner}`;
             
+            // Jika tidak dipaksa refresh, coba ambil dari cache memori
             if (!forceRefresh) {
                 const cachedData = sessionStorage.getItem(cacheKey);
                 if (cachedData) {
@@ -557,15 +543,14 @@
             }
 
             try {
-                // BUG FIX: Added basic check to avoid aggressive rate limiting. 
-                // A better approach in production is using an authenticated backend.
+                // PENINGKATAN: Handle error 403 Rate Limit GitHub
                 const res = await fetch(`https://api.github.com/users/${owner}/repos?per_page=100&sort=updated`);
                 if(res.ok) {
                     const data = await res.json();
                     ghPublicReposCache = data.map(r => r.name);
                     sessionStorage.setItem(cacheKey, JSON.stringify(ghPublicReposCache));
                 } else if (res.status === 403) {
-                    console.warn("GitHub API rate limit exceeded. Autocomplete may not work.");
+                    console.warn("GitHub API rate limit exceeded. Autocomplete may not work temporary.");
                 }
             } catch(e) { console.error("Failed loading Github repos", e); }
         }
@@ -587,8 +572,8 @@
 
                 filtered.forEach(item => {
                     const div = document.createElement('div');
-                    div.className = 'px-3 md:px-4 py-2 text-xs md:text-sm font-mono text-slate-300 hover:bg-cyan-500/20 hover:text-white cursor-pointer transition-colors';
-                    div.innerHTML = `<i class="fas fa-book mr-2 opacity-50 text-[10px]"></i>${item}`;
+                    div.className = 'px-3 md:px-4 py-2 text-[10px] md:text-sm font-mono text-slate-300 hover:bg-cyan-500/20 hover:text-white cursor-pointer transition-colors';
+                    div.innerHTML = `<i class="fas fa-book mr-1.5 opacity-50 text-[10px]"></i>${item}`;
                     
                     div.addEventListener('click', (e) => { 
                         e.preventDefault();
@@ -602,6 +587,7 @@
                 DOM.dropdownRepo.classList.remove('hidden');
             };
 
+            // Menambahkan click event agar dropdown lebih responsif saat disentuh di HP
             DOM.repo.addEventListener('focus', () => {
                 if(ghPublicReposCache.length === 0 && DOM.owner.value) fetchGitHubPublicRepos().then(render);
                 else render();
@@ -678,7 +664,7 @@
                     hideAlert();
                 });
                 
-                // Keyboard accessibility for tabs
+                // Keyboard A11y Support
                 tab.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -702,6 +688,7 @@
             
             DOM.btnTriggerDelete.addEventListener('click', () => {
                 const selectedId = DOM.deleteSelect.value;
+                // Diperketat konversi ID ke String agar tidak gagal find
                 const selectedProj = vercelProjects.find(p => String(p.id) === String(selectedId));
                 if (!selectedProj) {
                     showAlert("Silakan pilih Project yang valid terlebih dahulu.", "error");
@@ -751,8 +738,8 @@
         function showAlert(message, type = 'error') {
             const bg = type === 'error' ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400';
             const icon = type === 'error' ? 'fa-times-circle' : 'fa-check-circle';
-            DOM.alertBox.className = `mt-1 mb-4 p-3 md:p-4 rounded-lg md:rounded-xl text-xs md:text-sm font-medium border flex items-start gap-2 shadow-inner relative z-10 ${bg}`; // Fixed A11y: text size
-            DOM.alertBox.innerHTML = `<i class="fas ${icon} mt-0.5 text-base"></i> <div class="flex-1">${message}</div>`;
+            DOM.alertBox.className = `mt-1 mb-4 p-2.5 md:p-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-medium border flex items-start gap-2 shadow-inner relative z-10 ${bg}`;
+            DOM.alertBox.innerHTML = `<i class="fas ${icon} mt-0.5 text-sm"></i> <div class="flex-1">${message}</div>`;
             DOM.alertBox.classList.remove('hidden');
             if (type === 'success') setTimeout(hideAlert, 6000);
         }
@@ -760,7 +747,7 @@
 
         function log(message, type = 'info') {
             const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false });
-            const time = `<span class="text-slate-600 select-none" aria-hidden="true">[${timeStr}]</span>`; // Fixed A11y
+            const time = `<span class="text-slate-600 select-none" aria-hidden="true">[${timeStr}]</span>`;
             let prefix = `<span class="text-cyan-400 select-none" aria-hidden="true">❯</span>`;
             let colorClass = 'text-slate-300';
             
@@ -771,7 +758,7 @@
             if (type === 'raw') {
                 const div = document.createElement('div'); div.className = 'w-full mt-1 mb-1'; div.innerHTML = message; DOM.logs.appendChild(div);
             } else {
-                const div = document.createElement('div'); div.className = `${colorClass} flex gap-2 items-start`;
+                const div = document.createElement('div'); div.className = `${colorClass} flex gap-1.5 md:gap-2 items-start`;
                 div.innerHTML = `${time} ${prefix} <div class="flex-1 break-words">${message}</div>`; DOM.logs.appendChild(div);
             }
             DOM.logContainer.scrollTo({ top: DOM.logContainer.scrollHeight, behavior: 'smooth' });
@@ -797,7 +784,7 @@
 
             hideAlert();
             const ogHtml = DOM.btnLoadAccount.innerHTML;
-            DOM.btnLoadAccount.innerHTML = `<div class="spinner !w-4 !h-4" aria-hidden="true"></div><span class="sr-only">Loading...</span>`; // Fixed A11y
+            DOM.btnLoadAccount.innerHTML = `<div class="spinner" aria-hidden="true"></div><span class="sr-only">Loading...</span>`;
             DOM.btnLoadAccount.disabled = true;
 
             try {
@@ -807,14 +794,13 @@
                     if (userRes.ok) {
                         const userData = await userRes.json();
                         if (userData.user && userData.user.uid) {
-                            const imgUrl = `https://vercel.com/api/www/avatar/${userData.user.uid}?s=120`;
                             const avatarImg = document.getElementById('user-avatar');
-                            avatarImg.src = imgUrl;
+                            avatarImg.src = `https://vercel.com/api/www/avatar/${userData.user.uid}?s=120`;
                             avatarImg.style.display = 'block';
-                            avatarImg.nextElementSibling.style.display = 'none'; // Sembunyikan ikon fallback jika sukses
+                            avatarImg.nextElementSibling.style.display = 'none'; // Sembunyikan ikon astronot fallback
                         }
                     }
-                } catch(e) { console.warn("Could not fetch user avatar."); }
+                } catch(e) { }
 
                 // 2. Load Projects
                 const res = await fetch("https://api.vercel.com/v9/projects?limit=100", {
@@ -866,7 +852,7 @@
             if (!token || !selectedProj) return;
 
             const ogHtml = DOM.btnConfirmDel.innerHTML;
-            DOM.btnConfirmDel.innerHTML = `<div class="spinner"></div><span class="sr-only">Deleting...</span>`; // Fixed A11y
+            DOM.btnConfirmDel.innerHTML = `<div class="spinner" aria-hidden="true"></div><span class="sr-only">Deleting...</span>`;
             DOM.btnConfirmDel.disabled = true;
             DOM.btnCancelDel.disabled = true;
 
@@ -887,6 +873,7 @@
                 DOM.btnTriggerDelete.disabled = true;
                 saveSettings();
                 
+                // Tutup modal secara hard-code (bukan simulasi klik) agar tidak nyangkut
                 DOM.modalContent.classList.replace('scale-100', 'scale-95');
                 setTimeout(() => DOM.modalDelete.classList.remove('active'), 200);
                 
@@ -911,11 +898,11 @@
             if (!token || !owner || !repo) return log("Token, Owner, and Repo are required!", "error");
             saveSettings();
             
-            log(`<div class="border-t border-slate-800/80 w-full my-2"></div>`, 'raw');
+            log(`<div class="border-t border-slate-800/80 w-full my-1"></div>`, 'raw');
             log("Starting Access Test...", "info");
             
             const ogHtml = DOM.btnTest.innerHTML;
-            DOM.btnTest.innerHTML = `<div class="spinner" style="border-top-color: #94a3b8; border-right-color: #cbd5e1;"></div><span class="sr-only">Testing...</span>`; // Subtle loader for test button
+            DOM.btnTest.innerHTML = `<div class="spinner" aria-hidden="true"></div><span class="sr-only">Testing...</span>`;
             DOM.btnTest.disabled = true;
 
             try {
@@ -955,15 +942,14 @@
             log(`[START] Deploying: <span class="text-white font-bold">${projectName}</span>`, "info");
             
             const ogHtml = DOM.btnDeploy.innerHTML;
-            DOM.btnDeploy.innerHTML = `<div class="spinner"></div> <span class="ml-2 font-bold tracking-widest uppercase text-xs md:text-sm">Building...</span>`;
+            DOM.btnDeploy.innerHTML = `<div class="spinner" aria-hidden="true"></div> <span class="ml-2 font-bold tracking-widest uppercase text-[10px] md:text-xs">Building...</span>`;
             DOM.btnDeploy.disabled = true;
 
             try {
-                // BUG FIX: Robust Environment Variables Parser
+                // PENINGKATAN: Environment Variables Parser yang Lebih Aman (Mendukung '=' di dalam value)
                 const envStr = DOM.env.value.trim();
                 const envObj = {};
                 if (envStr) {
-                    // Split string while preserving values that contain equal signs
                     const lines = envStr.split(/\r?\n/);
                     lines.forEach(line => {
                         const separatorIndex = line.indexOf('=');
@@ -971,9 +957,9 @@
                             const key = line.substring(0, separatorIndex).trim();
                             let val = line.substring(separatorIndex + 1).trim();
                             
-                            if (!key) return; // Skip empty keys
+                            if (!key) return; // Abaikan jika key kosong
                             
-                            // Remove surrounding quotes if they exist
+                            // Hapus tanda kutip di awal dan akhir jika ada
                             if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
                                 val = val.substring(1, val.length - 1);
                             }
@@ -1057,7 +1043,7 @@
                 if (!deployRes.ok) throw new Error(`Vercel Deploy Error: ${deployData.error?.message}`);
 
                 const deploymentId = deployData.id;
-                log(`Deployment active. ID: <span class="text-purple-400 font-mono">${deploymentId}</span>`, "success");
+                log(`Deployment active. ID: <span class="text-purple-400">${deploymentId}</span>`, "success");
 
                 // STEP 4: Smart Polling Status
                 let status = deployData.readyState || "QUEUED";
@@ -1091,12 +1077,12 @@
                     }
                     log("DEPLOYMENT SUCCESSFUL", "success");
                     log(`
-                        <div class="mt-3 mb-2 p-3 md:p-4 border border-cyan-500/30 bg-cyan-950/20 rounded-lg shadow-inner">
-                            <div class="mb-3 border-b border-cyan-900/50 pb-2 text-cyan-400 font-bold flex items-center gap-2 text-sm">
+                        <div class="mt-2 mb-1 p-3 border border-cyan-500/30 bg-cyan-950/20 rounded-lg shadow-inner">
+                            <div class="mb-2 border-b border-cyan-900/50 pb-2 text-cyan-400 font-bold flex items-center gap-1.5 text-[11px] md:text-sm">
                                 <i class="fas fa-check-circle"></i> App is Live
                             </div>
                             <div class="space-y-2 font-sans">
-                                <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-white hover:text-cyan-300 font-medium break-all flex items-center gap-2 group w-max transition-colors text-xs md:text-sm">
+                                <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-white hover:text-cyan-300 font-medium break-all flex items-center gap-1.5 group w-max transition-colors text-[11px] md:text-sm">
                                     <i class="fas fa-globe text-cyan-500"></i> <span class="border-b border-transparent group-hover:border-cyan-300 pb-0.5">${url}</span> 
                                 </a>
                             </div>
@@ -1106,12 +1092,12 @@
                 else if (status === "ERROR") {
                     let errorMsg = `Deployment failed (Status: ERROR).`;
                     if (finalStatData && finalStatData.error && finalStatData.error.message) {
-                        log(`<span class="text-rose-400 font-mono text-xs break-all">Reason: ${finalStatData.error.message}</span>`, "raw");
+                        log(`<span class="text-rose-400 font-mono text-[10px] break-all">Reason: ${finalStatData.error.message}</span>`, "raw");
                     }
                     if (finalStatData && finalStatData.inspectorUrl) {
                         log(`
-                            <div class="mt-2 mb-2 p-3 border border-rose-500/30 bg-rose-950/20 rounded-lg">
-                                <a href="${finalStatData.inspectorUrl}" target="_blank" rel="noopener noreferrer" class="text-rose-300 underline hover:text-rose-200 text-xs md:text-sm">
+                            <div class="mt-1 mb-1 p-2 border border-rose-500/30 bg-rose-950/20 rounded-lg">
+                                <a href="${finalStatData.inspectorUrl}" target="_blank" rel="noopener noreferrer" class="text-rose-300 underline hover:text-rose-200 text-[10px] md:text-xs">
                                     <i class="fas fa-external-link-alt mr-1"></i> View Full Logs
                                 </a>
                             </div>
@@ -1125,7 +1111,7 @@
             } catch (err) {
                 log(err.message, "error");
             } finally {
-                DOM.btnDeploy.innerHTML = `<i class="fas fa-rocket"></i> <span>Deploy to Vercel</span>`;
+                DOM.btnDeploy.innerHTML = `<i class="fas fa-rocket" aria-hidden="true"></i> <span>Deploy to Vercel</span>`;
                 DOM.btnDeploy.disabled = false;
             }
         }
