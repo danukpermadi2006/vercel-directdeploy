@@ -1,0 +1,14 @@
+/* ==========================================================
+   Vercel DirectDeploy - responsive.css (breakpoint >= 768px)
+   ========================================================== */
+
+@media (min-width: 768px) {
+            .input-dark { font-size: 14px !important; }
+        }
+
+@media (min-width: 768px) {
+            .cyber-checkbox { width: 1.25rem; height: 1.25rem; }
+            .cyber-checkbox::before { width: 0.65rem; height: 0.65rem; }
+        }
+
+@media (min-width: 768px) { .nav-tab { font-size: 0.875rem; padding: 0.75rem 1rem; gap: 0.5rem; } }
